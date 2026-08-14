@@ -201,10 +201,29 @@
   .timeline .yy{ font-family:'Jua'; color:var(--coral-deep); font-size:0.95rem; }
   .timeline .tx{ color:var(--ink-soft); font-size:0.92rem; }
 
-  .philosophy-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:30px; }
+  .philosophy-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:30px; }
   .phi-card{ background:var(--cream-deep); border-radius:18px; padding:20px; text-align:center; }
   .phi-card .ic{ width:40px; height:40px; margin:0 auto 10px; }
-  @media (max-width:760px){ .philosophy-grid{ grid-template-columns:1fr; } }
+  @media (max-width:900px){ .philosophy-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:480px){ .philosophy-grid{ grid-template-columns:1fr; } }
+
+  .director-quote{
+    border-left:4px solid var(--coral); background:var(--cream-deep); border-radius:0 14px 14px 0;
+    padding:16px 20px; margin-bottom:16px; font-family:'Gowun Dodum'; color:var(--ink); line-height:1.8;
+  }
+
+  .feature-strip{ display:grid; grid-template-columns:repeat(3,1fr); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); margin-top:24px; }
+  .feature-item{ padding:28px 22px; color:#fff; }
+  .feature-item h4{ font-family:'Jua'; font-size:1.05rem; margin-bottom:10px; }
+  .feature-item p{ font-size:0.9rem; opacity:0.95; }
+  @media (max-width:760px){ .feature-strip{ grid-template-columns:1fr; } }
+
+  .ai-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:24px; }
+  .ai-card{ background:#fff; border:2px solid var(--line); border-radius:16px; padding:20px; box-shadow:var(--shadow); }
+  .ai-card .tag{ display:inline-block; font-family:'Jua'; font-size:0.72rem; background:var(--ink); color:#fff; border-radius:999px; padding:4px 12px; margin-bottom:10px; }
+  .ai-card h4{ font-size:1rem; margin-bottom:6px; }
+  .ai-card p{ font-size:0.88rem; color:var(--ink-soft); }
+  @media (max-width:760px){ .ai-grid{ grid-template-columns:1fr; } }
 
   /* Program */
   .age-tabs{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
@@ -410,7 +429,8 @@
         </div>
         <div>
           <h3>안녕하세요, 국공립만촌삼정에듀파크어린이집입니다.</h3>
-          <p>저희 어린이집은 아이들이 스스로 탐색하고 놀이 속에서 배우는 과정을 소중히 여깁니다. 선생님과 부모님이 함께 신뢰를 쌓아가며, 아이들이 하루하루 안전하고 즐겁게 지낼 수 있도록 최선을 다하겠습니다. 앞으로도 열린 마음으로 소통하는 어린이집이 되겠습니다.</p>
+          <blockquote class="director-quote">"모든 아이는 저마다의 속도와 빛깔로 자랍니다.<br>그 속도를 기다려주고, 그 빛깔을 알아봐주는 것<br>그것이 저희가 생각하는 진짜 보육입니다."</blockquote>
+          <p>저희는 아이를 가르쳐야 할 대상이 아니라, 스스로 배우고 자라나는 힘을 가진 존재로 바라봅니다. 정해진 틀에 아이를 맞추기보다, 아이 한 명 한 명의 관심과 속도에 귀 기울이며 놀이 안에서 스스로 세상을 탐색하도록 돕고 있습니다. 보육교직원 모두가 이 마음을 함께 나누며, 아이 중심의 하루를 만들어가겠습니다. 학부모님과도 언제나 열린 소통으로 함께하겠습니다.</p>
           <p class="sign">— 만촌삼정에듀파크어린이집 원장 신수정 드림</p>
         </div>
       </div>
@@ -428,15 +448,19 @@
       <div class="philosophy-grid">
         <div class="phi-card">
           <svg class="ic" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="#6FC3E0"/><path d="M16 24c2-6 5-9 8-9s6 3 8 9" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>
-          <h3>놀이 중심 보육</h3><p>아이 스스로 흥미를 찾고 몰입하는 놀이를 지원합니다.</p>
+          <h3>놀이중심 교육</h3><p>아이가 주도하는 자유놀이 속에서 사고력과 사회성을 키웁니다.</p>
+        </div>
+        <div class="phi-card">
+          <svg class="ic" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="#8FCFA8"/><path d="M24 12c-4 6-4 10 0 14 4-4 4-8 0-14z" fill="#fff"/><path d="M24 26v10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+          <h3>생태교육</h3><p>텃밭, 산책, 계절 활동으로 자연과 더불어 자라납니다.</p>
         </div>
         <div class="phi-card">
           <svg class="ic" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="#FF9466"/><path d="M24 14v20M14 24h20" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
-          <h3>존중과 안전</h3><p>아이 개개인의 발달과 속도를 존중하는 안전한 환경을 만듭니다.</p>
+          <h3>개별존중 보육</h3><p>아이마다 다른 발달 속도를 인정하고 맞춤 지원합니다.</p>
         </div>
         <div class="phi-card">
-          <svg class="ic" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="#8FCFA8"/><path d="M15 28c3 4 7 6 9 6s6-2 9-6" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>
-          <h3>가정과의 소통</h3><p>알림장과 상담을 통해 부모님과 함께 아이의 성장을 나눕니다.</p>
+          <svg class="ic" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="#3EA6CC"/><rect x="15" y="15" width="18" height="18" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="24" cy="24" r="3.5" fill="#fff"/></svg>
+          <h3>AI 기반 관찰기록</h3><p>놀이와 성장의 순간을 데이터로 세심하게 기록합니다.</p>
         </div>
       </div>
     </div>
@@ -489,6 +513,34 @@
           <tr><th>15:00–16:30</th><td>오후 놀이 및 특별활동</td></tr>
           <tr><th>16:30–19:30</th><td>자유놀이 및 순차 하원 · 통합보육</td></tr>
         </table>
+      </div>
+
+      <div class="section-title" style="margin-top:44px;"><span class="num">03</span><h2>특별 프로그램</h2></div>
+      <p style="color:var(--ink-soft); margin-top:-10px; margin-bottom:4px;">놀이중심, 생태교육, AI교육 — 세 축이 균형을 이루며 아이의 하루를 채웁니다.</p>
+      <div class="feature-strip">
+        <div class="feature-item" style="background:var(--sky-deep);">
+          <h4>🎨 놀이중심 교육</h4>
+          <p>정해진 커리큘럼보다 아이가 스스로 선택하는 놀이를 우선합니다.</p>
+        </div>
+        <div class="feature-item" style="background:var(--mint-deep);">
+          <h4>🌿 생태교육</h4>
+          <p>텃밭 가꾸기와 계절 산책으로 자연의 흐름을 몸으로 배웁니다.</p>
+        </div>
+        <div class="feature-item" style="background:var(--coral-deep);">
+          <h4>🤖 AI 교육 · 부모교육</h4>
+          <p>AI 시대를 살아갈 아이와 부모를 위한 맞춤 교육을 제공합니다.</p>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top:44px;"><span class="num">04</span><h2>AI 관찰 비서</h2></div>
+      <p style="color:var(--ink-soft); margin-top:-10px; margin-bottom:4px;">사람의 눈으로 다 담을 수 없는 아이의 하루를, AI가 함께 관찰하고 기록합니다. 놀이의 순간이 부모님께 더 세밀하게 전달됩니다.</p>
+      <div class="ai-grid">
+        <div class="ai-card"><span class="tag">기록</span><h4>놀이기록</h4><p>아이가 오늘 어떤 놀이를 얼마나 몰입했는지 자동으로 기록됩니다.</p></div>
+        <div class="ai-card"><span class="tag">분석</span><h4>놀이선호도 분석</h4><p>반복되는 놀이 패턴을 분석해 아이의 흥미와 강점을 찾아냅니다.</p></div>
+        <div class="ai-card"><span class="tag">관계</span><h4>사회관계 분석</h4><p>또래와의 상호작용 빈도와 유형을 관찰해 사회성 발달을 살핍니다.</p></div>
+        <div class="ai-card"><span class="tag">발달</span><h4>발달기록</h4><p>영역별 발달 지표를 누적 기록하여 성장 흐름을 한눈에 보여줍니다.</p></div>
+        <div class="ai-card"><span class="tag">성장</span><h4>성장기록 리포트</h4><p>월간 AI 성장 리포트로 아이의 변화를 사진과 함께 정리합니다.</p></div>
+        <div class="ai-card"><span class="tag">공유</span><h4>부모와 성장 공유</h4><p>키즈노트 연동으로 관찰 기록을 실시간으로 부모님과 나눕니다.</p></div>
       </div>
     </div>
   </section>
