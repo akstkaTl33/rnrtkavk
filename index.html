@@ -184,8 +184,9 @@
 
   /* About */
   .greeting-card{ display:grid; grid-template-columns:120px 1fr; gap:24px; align-items:center; }
-  .avatar{ width:120px; height:120px; border-radius:50%; background:var(--mint); display:flex; align-items:center; justify-content:center; }
+  .avatar{ width:120px; height:120px; border-radius:50%; background:var(--mint); display:flex; align-items:center; justify-content:center; overflow:hidden; }
   .avatar svg{ width:66px; height:66px; }
+  .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
   .greeting-card h3{ font-size:1.15rem; margin-bottom:8px; }
   .greeting-card p{ color:var(--ink-soft); }
   .sign{ margin-top:14px; font-family:'Gowun Dodum'; color:var(--ink); }
@@ -384,7 +385,7 @@
       <div class="section-title"><span class="num">01</span><h2>원장 인사말</h2></div>
       <div class="card greeting-card">
         <div class="avatar">
-          <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="18" r="8" fill="#fff"/><path d="M10 40c2-9 8-14 14-14s12 5 14 14" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+          <img src="images/director.jpg" alt="원장님 사진">
         </div>
         <div>
           <h3>안녕하세요, 국공립만촌삼정에듀파크어린이집입니다.</h3>
