@@ -289,13 +289,30 @@
   /* Video */
   .video-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
   @media (max-width:700px){ .video-grid{ grid-template-columns:1fr; } }
-  .video-card{ background:#fff; border:2px solid var(--line); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); }
-  .video-thumb{ aspect-ratio:16/9; background:linear-gradient(135deg,var(--sky),var(--mint)); position:relative; display:flex; align-items:center; justify-content:center; }
+  .video-card{ background:#fff; border:2px solid var(--line); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); width:100%; text-align:left; display:block; padding:0; }
+  .video-thumb{ aspect-ratio:16/9; background:linear-gradient(135deg,var(--sky),var(--mint)); position:relative; display:flex; align-items:center; justify-content:center; transition:filter .15s ease; }
+  .video-card:hover .video-thumb, .video-card:focus-visible .video-thumb{ filter:brightness(1.06); }
+  .video-card:disabled{ cursor:default; }
+  .video-card:disabled .video-thumb{ filter:grayscale(0.5) brightness(0.95); }
   .play-btn{ width:56px; height:56px; border-radius:50%; background:rgba(255,255,255,0.92); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow); }
   .play-btn svg{ width:20px; height:20px; margin-left:3px; }
   .video-card .v-body{ padding:14px 16px; }
   .video-card h4{ font-size:0.95rem; margin-bottom:4px; }
   .video-card p{ font-size:0.82rem; color:var(--ink-soft); }
+  .coming-soon-badge{ position:absolute; top:10px; right:10px; background:rgba(58,51,46,0.75); color:#fff; font-family:'Jua'; font-size:0.68rem; padding:4px 10px; border-radius:999px; }
+
+  .video-lightbox{
+    display:none; position:fixed; inset:0; z-index:1000;
+    background:rgba(30,26,22,0.92); align-items:center; justify-content:center; padding:20px;
+  }
+  .video-lightbox.open{ display:flex; }
+  .video-lightbox video{ max-width:90vw; max-height:86vh; border-radius:12px; box-shadow:0 20px 50px rgba(0,0,0,0.4); background:#000; }
+  .video-lightbox .lb-close{
+    position:absolute; top:18px; right:18px; background:rgba(255,255,255,0.15); color:#fff; border-radius:50%;
+    width:44px; height:44px; font-size:1.4rem; display:flex; align-items:center; justify-content:center;
+    transition:background .15s ease;
+  }
+  .video-lightbox .lb-close:hover{ background:rgba(255,255,255,0.3); }
 
   /* Location */
   .loc-grid{ display:grid; grid-template-columns:1.1fr 1fr; gap:24px; align-items:start; }
@@ -578,17 +595,25 @@
       </div>
 
       <div class="section-title" style="margin-top:44px;"><span class="num">02</span><h2>영상으로 보는 이야기</h2></div>
-      <div class="video-grid">
-        <div class="video-card">
+      <div class="video-grid" id="videoGallery">
+        <button type="button" class="video-card" data-video="video/intro.mp4">
           <div class="video-thumb"><div class="play-btn"><svg viewBox="0 0 24 24" fill="#3A332E"><path d="M6 4l14 8-14 8z"/></svg></div></div>
           <div class="v-body"><h4>어린이집 소개 영상</h4><p>원의 하루와 시설을 담은 소개 영상입니다.</p></div>
-        </div>
-        <div class="video-card">
-          <div class="video-thumb"><div class="play-btn"><svg viewBox="0 0 24 24" fill="#3A332E"><path d="M6 4l14 8-14 8z"/></svg></div></div>
+        </button>
+        <button type="button" class="video-card" disabled aria-disabled="true">
+          <div class="video-thumb">
+            <span class="coming-soon-badge">준비 중</span>
+            <div class="play-btn"><svg viewBox="0 0 24 24" fill="#3A332E"><path d="M6 4l14 8-14 8z"/></svg></div>
+          </div>
           <div class="v-body"><h4>행사 영상 모음</h4><p>계절 행사와 활동 모습을 확인해 보세요.</p></div>
-        </div>
+        </button>
       </div>
-      <p class="gallery-note">* 실제 영상(유튜브 링크 등)을 알려주시면 재생 가능한 영상으로 연결해 드릴게요.</p>
+      <p class="gallery-note">* 행사 영상도 보내주시면 갤러리에 추가해 드릴게요.</p>
+
+      <div class="video-lightbox" id="videoLightbox" aria-hidden="true">
+        <button type="button" class="lb-close" aria-label="닫기">✕</button>
+        <video id="videoLightboxPlayer" controls playsinline></video>
+      </div>
     </div>
   </section>
 
@@ -786,6 +811,35 @@
       if (e.key === 'Escape') close();
       if (e.key === 'ArrowLeft') show(current - 1);
       if (e.key === 'ArrowRight') show(current + 1);
+    });
+  }
+
+  // 영상으로 보는 이야기 - video lightbox
+  const videoGalleryEl = document.getElementById('videoGallery');
+  if (videoGalleryEl) {
+    const vlb = document.getElementById('videoLightbox');
+    const player = document.getElementById('videoLightboxPlayer');
+
+    function openVideo(src){
+      player.src = src;
+      vlb.classList.add('open');
+      vlb.setAttribute('aria-hidden', 'false');
+      player.play().catch(() => {});
+    }
+    function closeVideo(){
+      player.pause();
+      player.src = '';
+      vlb.classList.remove('open');
+      vlb.setAttribute('aria-hidden', 'true');
+    }
+
+    videoGalleryEl.querySelectorAll('.video-card[data-video]').forEach(card => {
+      card.addEventListener('click', () => openVideo(card.dataset.video));
+    });
+    vlb.querySelector('.lb-close').addEventListener('click', closeVideo);
+    vlb.addEventListener('click', (e) => { if (e.target === vlb) closeVideo(); });
+    document.addEventListener('keydown', (e) => {
+      if (vlb.classList.contains('open') && e.key === 'Escape') closeVideo();
     });
   }
 </script>
