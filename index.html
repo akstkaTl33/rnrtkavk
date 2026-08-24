@@ -223,10 +223,26 @@
   }
 
   .feature-strip{ display:grid; grid-template-columns:repeat(3,1fr); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); margin-top:24px; }
-  .feature-item{ padding:28px 22px; color:#fff; }
+  .feature-item{ display:block; padding:28px 22px; color:#fff; transition:filter .15s ease; }
+  .feature-item:hover, .feature-item:focus-visible{ filter:brightness(1.08); }
   .feature-item h4{ font-family:'Jua'; font-size:1.05rem; margin-bottom:10px; }
   .feature-item p{ font-size:0.9rem; opacity:0.95; }
+  .feature-item .feature-link{ display:inline-block; margin-top:12px; font-size:0.82rem; font-family:'Jua'; opacity:0.95; }
   @media (max-width:760px){ .feature-strip{ grid-template-columns:1fr; } }
+
+  .detail-block{
+    display:none; scroll-margin-top:90px; margin-top:24px; background:#fff; border:2px solid var(--line);
+    border-radius:var(--radius); box-shadow:var(--shadow); padding:26px 28px;
+  }
+  .detail-block:target{ display:block; animation:detail-in .25s ease; }
+  @keyframes detail-in{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+  .detail-block h3{ font-family:'Jua'; font-size:1.2rem; margin-bottom:6px; }
+  .detail-intro{ color:var(--ink-soft); font-size:0.9rem; margin-bottom:18px; }
+  .detail-item{ padding:14px 0; border-top:1px solid var(--line); }
+  .detail-item:first-of-type{ border-top:none; }
+  .detail-item h5{ font-family:'Jua'; font-size:0.98rem; color:var(--sky-deep); margin-bottom:4px; }
+  .detail-item p{ font-size:0.9rem; color:var(--ink-soft); line-height:1.6; }
+  .detail-back{ display:inline-block; margin-top:18px; font-family:'Jua'; font-size:0.85rem; color:var(--coral-deep); }
 
 
   /* Program */
@@ -553,21 +569,60 @@
         </div>
       </div>
 
-      <div class="section-title" style="margin-top:44px;"><span class="num">02</span><h2>특별 프로그램</h2></div>
-      <p style="color:var(--ink-soft); margin-top:-10px; margin-bottom:4px;">놀이중심, 생태교육, AI교육 — 세 축이 균형을 이루며 아이의 하루를 채웁니다.</p>
+      <div class="section-title" style="margin-top:44px;" id="edu-programs"><span class="num">02</span><h2>교육프로그램</h2></div>
+      <p style="color:var(--ink-soft); margin-top:-10px; margin-bottom:4px;">특별활동, 특성화, 특색사업 — 세 축이 균형을 이루며 아이의 하루를 채웁니다.</p>
       <div class="feature-strip">
-        <div class="feature-item" style="background:var(--sky-deep);">
-          <h4>🎨 놀이중심 교육</h4>
-          <p>정해진 커리큘럼보다 아이가 스스로 선택하는 놀이를 우선합니다.</p>
+        <a class="feature-item" href="#detail-activity" style="background:var(--sky-deep);">
+          <h4>🎨 특별활동프로그램</h4>
+          <p>외부 전문강사와 함께하는 체육·영어·음악·미술 수업입니다.</p>
+          <span class="feature-link">자세히 보기 →</span>
+        </a>
+        <a class="feature-item" href="#detail-specialization" style="background:var(--mint-deep);">
+          <h4>🌿 특성화 교육</h4>
+          <p>담임교사가 일상 속에서 진행하는 오감·미술·한글 프로그램입니다.</p>
+          <span class="feature-link">자세히 보기 →</span>
+        </a>
+        <a class="feature-item" href="#detail-nature" style="background:var(--coral-deep);">
+          <h4>🌱 특색사업-자연친화교육</h4>
+          <p>탄소중립 실천과 숲놀이로 자연과 가까워지는 우리 원만의 프로그램입니다.</p>
+          <span class="feature-link">자세히 보기 →</span>
+        </a>
+      </div>
+
+      <div class="detail-block" id="detail-activity">
+        <h3>🎨 특별활동프로그램</h3>
+        <p class="detail-intro">외부 전문강사가 진행하는 연령별 특별활동입니다.</p>
+        <div class="detail-item"><h5>트렌디아이 [체육]</h5><p>만2세 주1회 1시간, 만1세 주1회 30분 · 어린이 전용 스포츠센터에서 연령별 발달과정에 맞는 다양한 스포츠를 한곳에서 경험합니다.</p></div>
+        <div class="detail-item"><h5>다중지능 통합놀이 · 베이비싸인</h5><p>만1세 주1회 30분 · 음악과 노래, 율동을 통해 베이비싸인을 익히고 개인별 교구조작 활동으로 하워드 가드너의 8가지 지능 발달과 오감발달을 돕습니다.</p></div>
+        <div class="detail-item"><h5>크레요니 [미술 퍼포먼스]</h5><p>만2세 주1회 30분 · 놀이 미술활동을 직접 체험하고 느끼며 독창적인 생각과 다양한 발상을 깨우쳐주는 창의 미술입니다.</p></div>
+        <div class="detail-item"><h5>비고츠키 아이생각 한글</h5><p>만1,2세 월1회 · 교사와 매일 진행한 한글 놀이를 한 달에 한 번 전문 선생님과 함께 다지는 활동입니다.</p></div>
+        <div class="detail-item"><h5>언어 [레디셋잉글리시]</h5><p>만1,2세 · 단어에서 문장, 스토리, 파닉스 말하기로 자연스럽게 이어지는 학습 설계로 영어 말하기 자신감을 키웁니다.</p></div>
+        <div class="detail-item"><h5>언어 [노부영]</h5><p>만1,2세 주2회, 연장반 주1회 30분 · 노래 부르는 영어 동화로, 학습이 아닌 재미있는 놀이 활동을 통해 영어의 즐거움을 키워줍니다.</p></div>
+        <div class="detail-item"><h5>음악 [헬로뮤지킹] · [우리i 뮤지컬]</h5><p>만1,2세 헬로뮤지킹(놀이를 통해 음악을 감각으로 익히는 수업), 만2세 2학기 우리i 뮤지컬(노래·춤·연기로 배우는 인성·감성 융합 프로젝트 수업)입니다.</p></div>
+        <a class="detail-back" href="#edu-programs">↑ 목록으로</a>
+      </div>
+
+      <div class="detail-block" id="detail-specialization">
+        <h3>🌿 특성화 교육</h3>
+        <p class="detail-intro">연령별 특징을 고려하여 담임교사가 일상생활 중에 진행합니다.</p>
+        <div class="detail-item"><h5>오감프로그램 [오! 플레이]</h5><p>만1세 Step1, 만2세 Step2 · 오감 놀잇감, 말놀이 그림책, 자연친구책, 언어놀이 포스터, 표현놀이북 등 5가지 놀이로 두뇌·신체·정서를 골고루 자극하는 오감자극 첫 놀이입니다.</p></div>
+        <div class="detail-item"><h5>미술프로그램 [메이커아트]</h5><p>만2세 · 메이커교육의 구체적 활동 과정을 미술에 접목시킨 경험적 미술교육으로, 유아가 스스로 생각하여 창의적으로 표현하며 상상한 것을 현실로 만드는 '메이커'로 성장하도록 돕습니다.</p></div>
+        <div class="detail-item"><h5>비고츠키 아이생각 한글</h5><p>만2세 · 한글의 원리를 음률과 애니메이션 강의로 배우고, 한글 파닉스 플래시 카드를 활용해 노래로 놀면서 배우는 통합학습 프로그램입니다.</p></div>
+        <a class="detail-back" href="#edu-programs">↑ 목록으로</a>
+      </div>
+
+      <div class="detail-block" id="detail-nature">
+        <h3>🌱 특색사업-자연친화교육</h3>
+        <p class="detail-intro">국공립만촌삼정에듀파크어린이집 교직원 자체개발 프로그램으로, 아이와 가정이 함께 자연과 가까워집니다.</p>
+        <div class="detail-item">
+          <h5>지구 [지킴이! 만삼] 특공대</h5>
+          <p>4월~11월, 월 1회 · 지(금우리는) 구(상해요) 특(별한경험) 공(유해요) 대(화해요) 5가지 솔루션을 10개월간 가정과 연계해 진행하는 탄소중립 교육입니다. 매월 첫째 주 키즈노트로 환경 미션을 안내하면 가정에서 실천 후 사진으로 결과를 공유하고, 참여 횟수에 따라 연말에 시상합니다. (예시 미션: 일회용품 줄이기, 장바구니·텀블러 사용하기, 분리수거 도전하기, 대중교통 이용하기 등)</p>
         </div>
-        <div class="feature-item" style="background:var(--mint-deep);">
-          <h4>🌿 생태교육</h4>
-          <p>텃밭 가꾸기와 계절 산책으로 자연의 흐름을 몸으로 배웁니다.</p>
+        <div class="detail-item">
+          <h5>[숲속학교] 숲놀이터</h5>
+          <p>연간 운영 · 숲의 변화(계절, 날씨, 생물 등)를 직접 경험하며 오감을 활용한 활동을 진행하고, 흙·나뭇가지·낙엽 등 자연물을 활용한 창의 놀이를 유도합니다. 매월 자연을 주제로 한 활동을 진행합니다. (3월 숲 친구들과 인사해요 · 4월 오감산책 · 5월 어떤 색이 있을까요? · 6월 곤충 친구들아 어딨니? · 7월 자연소리를 찾아요 · 8월 숲 속 숨바꼭질 · 9월 바람이 준 선물 · 10월 나뭇잎 요정 · 11월 열매들의 여행 · 12월 어디에서 잠잘까? · 1월 나뭇가지와 놀아요 · 2월 새들의 만찬)</p>
         </div>
-        <div class="feature-item" style="background:var(--coral-deep);">
-          <h4>🤖 AI 교육 · 부모교육</h4>
-          <p>AI 시대를 살아갈 아이와 부모를 위한 맞춤 교육을 제공합니다.</p>
-        </div>
+        <a class="detail-back" href="#edu-programs">↑ 목록으로</a>
       </div>
 
     </div>
