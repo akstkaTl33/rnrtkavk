@@ -812,9 +812,11 @@
 <style>
   #floatingPopup{
     position:fixed; left:0; top:0; width:96px; height:96px;
-    z-index:9999; will-change:transform;
+    z-index:9999; will-change:transform; touch-action:none; cursor:grab;
     filter:drop-shadow(0 10px 18px rgba(58,51,46,0.28));
   }
+  #floatingPopup.dragging{ cursor:grabbing; }
+  #floatingPopup.dragging a{ animation-play-state:paused; }
   #floatingPopup a{
     display:block; width:100%; height:100%; border-radius:50%;
     border:3px solid #fff; overflow:hidden; background:var(--cream-deep);
@@ -859,6 +861,7 @@
   if (sessionStorage.getItem('floatingPopupClosed') === '1') return;
   const el = document.getElementById('floatingPopup');
   const closeBtn = el.querySelector('.popup-close');
+  const link = el.querySelector('a');
   const size = el.offsetWidth || 96;
 
   function closePopup(){
@@ -870,40 +873,70 @@
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const margin = 16;
-  let x = margin, y = window.innerHeight - size - margin - 70;
-  let vx = 1.4, vy = 1.1;
+  const x = margin; // stays pinned to the left edge
+  let y = window.innerHeight - size - margin - 70;
+  let vy = 1.2;
   let paused = false;
+  let dragging = false;
+  let dragMoved = false;
+  let dragStartClientY = 0;
+  let dragStartY = 0;
+
+  function maxY(){ return window.innerHeight - size - margin; }
+  function setPos(){ el.style.transform = 'translate(' + x + 'px,' + y + 'px)'; }
 
   el.addEventListener('mouseenter', function(){ paused = true; });
   el.addEventListener('mouseleave', function(){ paused = false; });
 
-  function bounds(){
-    return { maxX: window.innerWidth - size - margin, maxY: window.innerHeight - size - margin };
-  }
-
   function tick(){
-    if (!paused){
-      const { maxX, maxY } = bounds();
-      x += vx; y += vy;
-      if (x <= margin){ x = margin; vx = Math.abs(vx); }
-      if (x >= maxX){ x = maxX; vx = -Math.abs(vx); }
+    if (!paused && !dragging){
+      y += vy;
       if (y <= margin){ y = margin; vy = Math.abs(vy); }
-      if (y >= maxY){ y = maxY; vy = -Math.abs(vy); }
-      el.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+      if (y >= maxY()){ y = maxY(); vy = -Math.abs(vy); }
+      setPos();
     }
     requestAnimationFrame(tick);
   }
 
-  if (reduceMotion){
-    const { maxX, maxY } = bounds();
-    el.style.transform = 'translate(' + maxX + 'px,' + maxY + 'px)';
-  } else {
+  // Drag up/down along the left edge
+  el.addEventListener('pointerdown', function(e){
+    dragging = true;
+    dragMoved = false;
+    dragStartClientY = e.clientY;
+    dragStartY = y;
+    el.classList.add('dragging');
+    el.setPointerCapture(e.pointerId);
+  });
+  el.addEventListener('pointermove', function(e){
+    if (!dragging) return;
+    const dy = e.clientY - dragStartClientY;
+    if (Math.abs(dy) > 4) dragMoved = true;
+    y = Math.min(Math.max(dragStartY + dy, margin), maxY());
+    setPos();
+  });
+  function endDrag(){
+    if (!dragging) return;
+    dragging = false;
+    el.classList.remove('dragging');
+    if (dragMoved){
+      const suppressClick = function(ev){
+        ev.preventDefault(); ev.stopPropagation();
+        link.removeEventListener('click', suppressClick);
+      };
+      link.addEventListener('click', suppressClick);
+    }
+  }
+  el.addEventListener('pointerup', endDrag);
+  el.addEventListener('pointercancel', endDrag);
+
+  setPos();
+  if (!reduceMotion){
     requestAnimationFrame(tick);
   }
 
   window.addEventListener('resize', function(){
-    const { maxX, maxY } = bounds();
-    x = Math.min(x, maxX); y = Math.min(y, maxY);
+    y = Math.min(y, maxY());
+    setPos();
   });
 })();
 </script>
