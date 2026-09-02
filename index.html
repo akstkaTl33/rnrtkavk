@@ -957,36 +957,40 @@
     requestAnimationFrame(tick);
   }
 
-  // Drag up/down along the left edge
+  // Drag up/down along the left edge (uses document-level listeners instead
+  // of pointer capture, since capturing on `el` was blocking the anchor's
+  // native click from firing)
   el.addEventListener('pointerdown', function(e){
     dragging = true;
     dragMoved = false;
     dragStartClientY = e.clientY;
     dragStartY = y;
     el.classList.add('dragging');
-    el.setPointerCapture(e.pointerId);
-  });
-  el.addEventListener('pointermove', function(e){
-    if (!dragging) return;
-    const dy = e.clientY - dragStartClientY;
-    if (Math.abs(dy) > 4) dragMoved = true;
-    y = Math.min(Math.max(dragStartY + dy, margin), maxY());
-    setPos();
-  });
-  function endDrag(){
-    if (!dragging) return;
-    dragging = false;
-    el.classList.remove('dragging');
-    if (dragMoved){
-      const suppressClick = function(ev){
-        ev.preventDefault(); ev.stopPropagation();
-        link.removeEventListener('click', suppressClick);
-      };
-      link.addEventListener('click', suppressClick);
+
+    function onMove(ev){
+      const dy = ev.clientY - dragStartClientY;
+      if (Math.abs(dy) > 4) dragMoved = true;
+      y = Math.min(Math.max(dragStartY + dy, margin), maxY());
+      setPos();
     }
-  }
-  el.addEventListener('pointerup', endDrag);
-  el.addEventListener('pointercancel', endDrag);
+    function onUp(){
+      dragging = false;
+      el.classList.remove('dragging');
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', onUp);
+      document.removeEventListener('pointercancel', onUp);
+      if (dragMoved){
+        const suppressClick = function(ev){
+          ev.preventDefault(); ev.stopPropagation();
+          link.removeEventListener('click', suppressClick);
+        };
+        link.addEventListener('click', suppressClick);
+      }
+    }
+    document.addEventListener('pointermove', onMove);
+    document.addEventListener('pointerup', onUp);
+    document.addEventListener('pointercancel', onUp);
+  });
 
   setPos();
   if (!reduceMotion){
