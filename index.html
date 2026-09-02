@@ -44,7 +44,6 @@
   }
 
   /* ===== Header ===== */
-  body.on-home header{ display:none; }
   header{
     position:sticky; top:0; z-index:100;
     background:rgba(255,251,242,0.92);
@@ -111,9 +110,8 @@
 
   /* ===== Pages ===== */
   main{ min-height:70vh; }
-  .page{ display:none; }
-  .page.active{ display:block; animation:fadeUp .45s ease; }
-  @keyframes fadeUp{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+  .page{ scroll-margin-top:84px; }
+  .page + .page{ border-top:1px solid var(--line); padding-top:8px; }
 
   .page-hero{
     padding:44px 0 30px; text-align:center;
@@ -790,13 +788,9 @@
   const navMenu = document.getElementById('mainNav');
   const menuToggle = document.getElementById('menuToggle');
 
-  function showPage(id){
-    pages.forEach(p => p.classList.toggle('active', p.id === 'page-' + id));
-    document.querySelectorAll('nav.blocks-nav .block-btn').forEach(b=>{
-      b.classList.toggle('active', b.dataset.nav === id);
-    });
-    document.body.classList.toggle('on-home', id === 'home');
-    window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+  function scrollToSection(id, behavior){
+    const target = document.getElementById('page-' + id);
+    if (target) target.scrollIntoView({ behavior: behavior || 'smooth', block: 'start' });
     navMenu.classList.remove('open');
   }
 
@@ -805,11 +799,24 @@
       e.preventDefault();
       const id = btn.dataset.nav;
       history.replaceState(null,'', '#' + id);
-      showPage(id);
+      scrollToSection(id);
     });
   });
 
   menuToggle.addEventListener('click', ()=> navMenu.classList.toggle('open'));
+
+  // Highlight the nav button for whichever section is in view while scrolling
+  const sectionObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if (!entry.isIntersecting) return;
+      const id = entry.target.id.replace('page-', '');
+      document.querySelectorAll('nav.blocks-nav .block-btn').forEach(b=>{
+        b.classList.toggle('active', b.dataset.nav === id);
+      });
+      history.replaceState(null, '', '#' + id);
+    });
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+  pages.forEach(p => sectionObserver.observe(p));
 
   // Contact form
   const form = document.getElementById('contactForm');
@@ -819,9 +826,11 @@
     form.reset();
   });
 
-  // Init from hash
-  const startId = (location.hash || '#home').replace('#','');
-  showPage(document.getElementById('page-' + startId) ? startId : 'home');
+  // Jump to the section named in the URL hash on load (no smooth-scroll animation)
+  const startId = (location.hash || '').replace('#','');
+  if (startId && document.getElementById('page-' + startId)){
+    requestAnimationFrame(()=> scrollToSection(startId, 'auto'));
+  }
 
   // 영상으로 보는 이야기 - video lightbox
   const videoGalleryEl = document.getElementById('videoGallery');
