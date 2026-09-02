@@ -873,7 +873,9 @@
     position:fixed; left:0; top:0; width:96px; height:96px;
     z-index:9999; will-change:transform; touch-action:none; cursor:grab;
     filter:drop-shadow(0 10px 18px rgba(58,51,46,0.28));
+    -webkit-user-select:none; user-select:none;
   }
+  #floatingPopup img, #floatingPopup a{ -webkit-user-drag:none; user-drag:none; }
   #floatingPopup.dragging{ cursor:grabbing; }
   #floatingPopup.dragging a{ animation-play-state:paused; }
   #floatingPopup a{
@@ -911,7 +913,7 @@
 <div id="floatingPopup" aria-hidden="false">
   <span class="popup-badge">NEW</span>
   <a href="https://gemini.google.com/gem/1yf5YFZvcEDt0KBS_454aGF4f6aTkLv2P?usp=sharing" target="_blank" rel="noopener noreferrer" aria-label="새 소식 바로가기">
-    <img src="images/popup-logo.png" alt="국공립만촌삼정에듀파크어린이집 팝업 링크">
+    <img src="images/popup-logo.png" alt="국공립만촌삼정에듀파크어린이집 팝업 링크" draggable="false">
   </a>
   <span class="popup-close" role="button" tabindex="0" aria-label="팝업 닫기">✕</span>
 </div>
@@ -956,6 +958,11 @@
     }
     requestAnimationFrame(tick);
   }
+
+  // Stop native image drag-and-drop from hijacking clicks (a browser's
+  // default "drag this image out of the page" gesture swallows the click
+  // that would otherwise follow, which was silently breaking the link)
+  el.addEventListener('dragstart', function(e){ e.preventDefault(); });
 
   // Drag up/down along the left edge (uses document-level listeners instead
   // of pointer capture, since capturing on `el` was blocking the anchor's
