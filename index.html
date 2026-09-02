@@ -619,42 +619,42 @@
       <div class="video-grid" id="videoGallery">
         <button type="button" class="video-card" data-video="video/intro.mp4">
           <div class="video-thumb">
-            <video class="thumb-preview" data-src="video/intro.mp4#t=0.5" muted playsinline preload="none" aria-hidden="true"></video>
+            <video class="thumb-preview" src="video/intro.mp4#t=0.5" muted playsinline preload="metadata" aria-hidden="true"></video>
             <div class="play-btn"><svg viewBox="0 0 24 24" fill="#3A332E"><path d="M6 4l14 8-14 8z"/></svg></div>
           </div>
           <div class="v-body"><h4>어린이집 소개 영상</h4><p>원의 하루와 시설을 담은 소개 영상입니다.</p></div>
         </button>
         <button type="button" class="video-card" data-video="video/staff.mp4">
           <div class="video-thumb">
-            <video class="thumb-preview" data-src="video/staff.mp4#t=0.5" muted playsinline preload="none" aria-hidden="true"></video>
+            <video class="thumb-preview" src="video/staff.mp4#t=0.5" muted playsinline preload="metadata" aria-hidden="true"></video>
             <div class="play-btn"><svg viewBox="0 0 24 24" fill="#3A332E"><path d="M6 4l14 8-14 8z"/></svg></div>
           </div>
           <div class="v-body"><h4>교직원</h4><p>선생님들을 소개하는 영상입니다.</p></div>
         </button>
         <button type="button" class="video-card" data-video="video/annual-events.mp4">
           <div class="video-thumb">
-            <video class="thumb-preview" data-src="video/annual-events.mp4#t=0.5" muted playsinline preload="none" aria-hidden="true"></video>
+            <video class="thumb-preview" src="video/annual-events.mp4#t=0.5" muted playsinline preload="metadata" aria-hidden="true"></video>
             <div class="play-btn"><svg viewBox="0 0 24 24" fill="#3A332E"><path d="M6 4l14 8-14 8z"/></svg></div>
           </div>
           <div class="v-body"><h4>연간 행사</h4><p>한 해 동안의 다양한 행사 모습을 담았습니다.</p></div>
         </button>
         <button type="button" class="video-card" data-video="video/community.mp4">
           <div class="video-thumb">
-            <video class="thumb-preview" data-src="video/community.mp4#t=0.5" muted playsinline preload="none" aria-hidden="true"></video>
+            <video class="thumb-preview" src="video/community.mp4#t=0.5" muted playsinline preload="metadata" aria-hidden="true"></video>
             <div class="play-btn"><svg viewBox="0 0 24 24" fill="#3A332E"><path d="M6 4l14 8-14 8z"/></svg></div>
           </div>
           <div class="v-body"><h4>지역사회기여</h4><p>지역사회와 함께하는 활동을 소개합니다.</p></div>
         </button>
         <button type="button" class="video-card" data-video="video/vulnerable-care.mp4">
           <div class="video-thumb">
-            <video class="thumb-preview" data-src="video/vulnerable-care.mp4#t=0.5" muted playsinline preload="none" aria-hidden="true"></video>
+            <video class="thumb-preview" src="video/vulnerable-care.mp4#t=0.5" muted playsinline preload="metadata" aria-hidden="true"></video>
             <div class="play-btn"><svg viewBox="0 0 24 24" fill="#3A332E"><path d="M6 4l14 8-14 8z"/></svg></div>
           </div>
           <div class="v-body"><h4>취약보육</h4><p>취약보육 지원 내용을 소개합니다.</p></div>
         </button>
         <button type="button" class="video-card" data-video="video/specialty.mp4">
           <div class="video-thumb">
-            <video class="thumb-preview" data-src="video/specialty.mp4#t=0.5" muted playsinline preload="none" aria-hidden="true"></video>
+            <video class="thumb-preview" src="video/specialty.mp4#t=0.5" muted playsinline preload="metadata" aria-hidden="true"></video>
             <div class="play-btn"><svg viewBox="0 0 24 24" fill="#3A332E"><path d="M6 4l14 8-14 8z"/></svg></div>
           </div>
           <div class="v-body"><h4>특색교육</h4><p>우리 원만의 특색교육 프로그램을 소개합니다.</p></div>
@@ -835,21 +835,10 @@
   // 영상으로 보는 이야기 - video lightbox
   const videoGalleryEl = document.getElementById('videoGallery');
   if (videoGalleryEl) {
-    // Load each thumbnail preview's video only once it's about to scroll into
-    // view (loading all of them up front would fetch several videos at once)
-    const thumbPreviews = videoGalleryEl.querySelectorAll('video.thumb-preview');
-    thumbPreviews.forEach(v => {
+    // ensure each thumbnail preview shows a real frame, not a blank one
+    videoGalleryEl.querySelectorAll('video.thumb-preview').forEach(v => {
       v.addEventListener('loadedmetadata', () => { try { v.currentTime = 0.5; } catch (e) {} });
     });
-    const thumbObserver = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const v = entry.target;
-        if (v.dataset.src){ v.src = v.dataset.src; v.removeAttribute('data-src'); }
-        obs.unobserve(v);
-      });
-    }, { rootMargin: '200px 0px' });
-    thumbPreviews.forEach(v => thumbObserver.observe(v));
 
     const vlb = document.getElementById('videoLightbox');
     const player = document.getElementById('videoLightboxPlayer');
