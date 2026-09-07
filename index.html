@@ -251,19 +251,6 @@
   /* Gallery */
   .gallery-note{ margin-top:18px; font-size:0.85rem; color:var(--ink-soft); background:var(--cream-deep); border-radius:14px; padding:14px 18px; }
 
-  /* Notice */
-  .notice-list{ display:flex; flex-direction:column; gap:10px; }
-  .notice-item{
-    display:flex; align-items:center; gap:14px; background:#fff; border:2px solid var(--line); border-radius:16px;
-    padding:14px 18px;
-  }
-  .notice-item .tag{ font-family:'Jua'; font-size:0.72rem; padding:4px 10px; border-radius:999px; color:#fff; flex-shrink:0; }
-  .tag.important{ background:var(--coral); }
-  .tag.notice{ background:var(--sky); }
-  .tag.menu{ background:var(--mint-deep); }
-  .notice-item .n-title{ flex:1; font-size:0.95rem; }
-  .notice-item .n-date{ font-size:0.8rem; color:var(--ink-soft); flex-shrink:0; }
-
   /* Video */
   .video-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
   @media (max-width:700px){ .video-grid{ grid-template-columns:1fr; } }
@@ -373,10 +360,6 @@
         <span class="icon-chip chip-c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-9.5-9C.8 7.5 3 4 6.5 4c2 0 3.5 1.2 5.5 3.5C14 5.2 15.5 4 17.5 4 21 4 23.2 7.5 21.5 11c-2.5 4.6-9.5 9-9.5 9z"/></svg></span>
         <span class="icon-label">갤러리</span>
       </a>
-      <a class="block-btn icon-style" data-nav="notice" href="#notice">
-        <span class="icon-chip chip-d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 17V11a6 6 0 1112 0v6l1.6 2.4H4.4L6 17z"/><path d="M10 20.5a2 2 0 004 0"/></svg></span>
-        <span class="icon-label">알림마당</span>
-      </a>
       <a class="block-btn icon-style" data-nav="location" href="#location">
         <span class="icon-chip chip-e"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></span>
         <span class="icon-label">오시는 길</span>
@@ -396,7 +379,6 @@
       <a class="hotspot menu-spot" data-nav="about"    href="#about"    style="left:64.3%; top:0.5%; width:5.4%; height:8.5%;" aria-label="어린이집 소개"></a>
       <a class="hotspot menu-spot" data-nav="program"  href="#program"  style="left:70.6%; top:0.5%; width:5.0%; height:8.5%;" aria-label="교육 프로그램"></a>
       <a class="hotspot menu-spot" data-nav="sharing"  href="#sharing"  style="left:78.3%; top:0.5%; width:3.4%; height:8.5%;" aria-label="갤러리"></a>
-      <a class="hotspot menu-spot" data-nav="notice"   href="#notice"   style="left:84.9%; top:0.5%; width:4.0%; height:8.5%;" aria-label="알림마당"></a>
       <a class="hotspot menu-spot" data-nav="location" href="#location" style="left:91.4%; top:0.5%; width:3.8%; height:8.5%;" aria-label="오시는 길"></a>
 
       <!-- 그림 속 하단 사랑/성장/놀이/꿈 배지 클릭 영역 -->
@@ -411,7 +393,6 @@
       <a data-nav="about" href="#about"><span class="dot" style="background:#E77A99;"></span>어린이집 소개</a>
       <a data-nav="program" href="#program"><span class="dot" style="background:#5FAE7C;"></span>교육 프로그램</a>
       <a data-nav="sharing" href="#sharing"><span class="dot" style="background:#F0723E;"></span>갤러리</a>
-      <a data-nav="notice" href="#notice"><span class="dot" style="background:#E0A526;"></span>알림마당</a>
       <a data-nav="location" href="#location"><span class="dot" style="background:#3EA6CC;"></span>오시는 길</a>
       <a data-nav="admission" href="#admission"><span class="dot" style="background:#6FC3E0;"></span>입소안내</a>
     </div>
@@ -674,25 +655,6 @@
     </div>
   </section>
 
-  <!-- ============ NOTICE (알림마당) ============ -->
-  <section class="page" id="page-notice">
-    <div class="wrap">
-      <div class="page-hero">
-        <span class="eyebrow">NOTICE</span>
-        <h1>알림마당</h1>
-        <p>어린이집의 소식과 안내사항을 확인하세요.</p>
-      </div>
-      <div class="notice-list">
-        <div class="notice-item"><span class="tag important">중요</span><span class="n-title">20XX학년도 신입원아 모집 안내</span><span class="n-date">20XX.XX.XX</span></div>
-        <div class="notice-item"><span class="tag notice">공지</span><span class="n-title">여름철 등하원 시간 안내</span><span class="n-date">20XX.XX.XX</span></div>
-        <div class="notice-item"><span class="tag menu">식단</span><span class="n-title">이번 달 식단표가 업데이트되었습니다</span><span class="n-date">20XX.XX.XX</span></div>
-        <div class="notice-item"><span class="tag notice">공지</span><span class="n-title">부모참여수업 신청 안내</span><span class="n-date">20XX.XX.XX</span></div>
-        <div class="notice-item"><span class="tag important">중요</span><span class="n-title">휴원 안내 (공휴일)</span><span class="n-date">20XX.XX.XX</span></div>
-      </div>
-      <p class="gallery-note">* 공지 목록은 예시입니다. 실제 공지사항으로 교체하거나 게시판 연동을 추가할 수 있습니다.</p>
-    </div>
-  </section>
-
   <!-- ============ LOCATION ============ -->
   <section class="page" id="page-location">
     <div class="wrap">
@@ -783,7 +745,7 @@
     </div>
     <div>
       <h3>바로가기</h3>
-      <p><a data-nav="about" href="#about">어린이집 소개</a><br><a data-nav="program" href="#program">교육 프로그램</a><br><a data-nav="sharing" href="#sharing">갤러리</a><br><a data-nav="notice" href="#notice">알림마당</a><br><a data-nav="location" href="#location">오시는 길</a><br><a data-nav="admission" href="#admission">입소안내</a></p>
+      <p><a data-nav="about" href="#about">어린이집 소개</a><br><a data-nav="program" href="#program">교육 프로그램</a><br><a data-nav="sharing" href="#sharing">갤러리</a><br><a data-nav="location" href="#location">오시는 길</a><br><a data-nav="admission" href="#admission">입소안내</a></p>
     </div>
   </div>
   <div class="footer-bottom wrap">© 20XX 국공립만촌삼정에듀파크어린이집. All rights reserved.</div>
