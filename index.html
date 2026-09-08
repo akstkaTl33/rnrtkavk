@@ -866,7 +866,7 @@
 <!-- ===== Floating moving popup link ===== -->
 <style>
   #floatingPopup{
-    position:fixed; left:0; top:0; width:96px; height:96px;
+    position:fixed; left:0; top:0; width:136px; height:136px;
     z-index:9999; will-change:transform; touch-action:none; cursor:grab;
     filter:drop-shadow(0 10px 18px rgba(58,51,46,0.28));
     -webkit-user-select:none; user-select:none;
@@ -876,21 +876,21 @@
   #floatingPopup.dragging a{ animation-play-state:paused; }
   #floatingPopup a{
     display:block; width:100%; height:100%; border-radius:50%;
-    border:3px solid #fff; overflow:hidden; background:var(--cream-deep);
+    border:4px solid #fff; overflow:hidden; background:var(--cream-deep);
     animation:popup-bob 2.6s ease-in-out infinite;
   }
   #floatingPopup img{ width:100%; height:100%; object-fit:cover; border-radius:50%; display:block; }
   #floatingPopup .popup-badge{
-    position:absolute; top:-6px; right:-6px;
+    position:absolute; top:-8px; right:-8px;
     background:var(--coral-deep); color:#fff; font-family:'Jua',sans-serif;
-    font-size:0.66rem; padding:3px 8px; border-radius:999px;
+    font-size:0.8rem; padding:4px 10px; border-radius:999px;
     box-shadow:0 4px 8px rgba(0,0,0,0.18); pointer-events:none;
   }
   #floatingPopup .popup-close{
-    position:absolute; bottom:-4px; left:50%; transform:translateX(-50%);
-    width:22px; height:22px; border-radius:50%;
+    position:absolute; bottom:-6px; left:50%; transform:translateX(-50%);
+    width:28px; height:28px; border-radius:50%;
     background:#fff; color:var(--ink-soft); border:1px solid var(--line);
-    box-shadow:var(--shadow); font-size:0.72rem; line-height:1;
+    box-shadow:var(--shadow); font-size:0.85rem; line-height:1;
     display:flex; align-items:center; justify-content:center;
     cursor:pointer;
   }
@@ -903,7 +903,7 @@
     #floatingPopup a{ animation:none; }
   }
   @media (max-width:560px){
-    #floatingPopup{ width:76px; height:76px; }
+    #floatingPopup{ width:110px; height:110px; }
   }
 </style>
 <div id="floatingPopup" aria-hidden="false">
