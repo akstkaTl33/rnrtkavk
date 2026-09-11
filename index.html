@@ -1040,27 +1040,53 @@
   <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
   <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
 </button>
-<audio id="bgmAudio" src="audio/bgm.mp3" loop preload="none"></audio>
+<audio id="bgmAudio" src="audio/bgm.mp3" loop preload="auto"></audio>
 <script>
 (function(){
   const btn = document.getElementById('bgmToggle');
   const audio = document.getElementById('bgmAudio');
   audio.volume = 0.25;
   let playing = false;
+  let userPaused = false;
+
+  function markPlaying(){
+    playing = true;
+    btn.classList.add('playing');
+    btn.setAttribute('aria-label', '배경음악 정지');
+  }
+  function markPaused(){
+    playing = false;
+    btn.classList.remove('playing');
+    btn.setAttribute('aria-label', '배경음악 재생');
+  }
+  function tryPlay(){
+    audio.play().then(markPlaying).catch(function(){ markPaused(); });
+  }
 
   btn.addEventListener('click', function(){
     if (playing){
       audio.pause();
-      playing = false;
-      btn.classList.remove('playing');
-      btn.setAttribute('aria-label', '배경음악 재생');
+      userPaused = true;
+      markPaused();
     } else {
-      audio.play().catch(function(){});
-      playing = true;
-      btn.classList.add('playing');
-      btn.setAttribute('aria-label', '배경음악 정지');
+      userPaused = false;
+      tryPlay();
     }
   });
+
+  // Try to start automatically; most browsers block audio-with-sound
+  // autoplay before any user interaction, so fall back to starting on
+  // the visitor's first tap/click/keypress anywhere on the page.
+  tryPlay();
+  function startOnFirstInteraction(){
+    if (!playing && !userPaused) tryPlay();
+    document.removeEventListener('click', startOnFirstInteraction);
+    document.removeEventListener('touchstart', startOnFirstInteraction);
+    document.removeEventListener('keydown', startOnFirstInteraction);
+  }
+  document.addEventListener('click', startOnFirstInteraction);
+  document.addEventListener('touchstart', startOnFirstInteraction);
+  document.addEventListener('keydown', startOnFirstInteraction);
 })();
 </script>
 
