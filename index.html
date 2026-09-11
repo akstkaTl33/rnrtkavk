@@ -1017,5 +1017,52 @@
 })();
 </script>
 
+<!-- ===== Background music toggle ===== -->
+<style>
+  #bgmToggle{
+    position:fixed; right:16px; bottom:16px; z-index:9998;
+    width:56px; height:56px; border-radius:50%;
+    background:var(--coral); color:#fff; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px rgba(58,51,46,0.28); cursor:pointer;
+    transition:transform .15s ease;
+  }
+  #bgmToggle:hover{ transform:scale(1.08); }
+  #bgmToggle svg{ width:24px; height:24px; }
+  #bgmToggle .icon-pause{ display:none; }
+  #bgmToggle.playing .icon-play{ display:none; }
+  #bgmToggle.playing .icon-pause{ display:block; }
+  @media (max-width:560px){
+    #bgmToggle{ width:48px; height:48px; right:12px; bottom:12px; }
+    #bgmToggle svg{ width:20px; height:20px; }
+  }
+</style>
+<button type="button" id="bgmToggle" aria-label="배경음악 재생">
+  <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+  <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+</button>
+<audio id="bgmAudio" src="audio/bgm.mp3" loop preload="none"></audio>
+<script>
+(function(){
+  const btn = document.getElementById('bgmToggle');
+  const audio = document.getElementById('bgmAudio');
+  audio.volume = 0.25;
+  let playing = false;
+
+  btn.addEventListener('click', function(){
+    if (playing){
+      audio.pause();
+      playing = false;
+      btn.classList.remove('playing');
+      btn.setAttribute('aria-label', '배경음악 재생');
+    } else {
+      audio.play().catch(function(){});
+      playing = true;
+      btn.classList.add('playing');
+      btn.setAttribute('aria-label', '배경음악 정지');
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
