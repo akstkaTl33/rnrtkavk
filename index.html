@@ -334,6 +334,20 @@
     box-shadow:0 4px 0 var(--coral-deep); transition:transform .12s ease;
   }
   .submit-btn:hover{ transform:translateY(-2px); }
+  .cafe-link-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background:#03C75A; color:#fff; padding:16px 38px; border-radius:999px; font-family:'Jua'; font-size:1.1rem;
+    box-shadow:0 5px 0 #029C48; transition:transform .12s ease;
+    animation:cafe-pulse 1.8s ease-in-out infinite;
+  }
+  .cafe-link-btn:hover{ transform:translateY(-3px); }
+  @keyframes cafe-pulse{
+    0%,100%{ box-shadow:0 5px 0 #029C48, 0 0 0 0 rgba(3,199,90,0.45); }
+    50%{ box-shadow:0 5px 0 #029C48, 0 0 0 12px rgba(3,199,90,0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .cafe-link-btn{ animation:none; }
+  }
   .form-msg{ font-size:0.85rem; color:var(--mint-deep); display:none; }
 
   /* Footer */
@@ -661,7 +675,7 @@
 
       <div style="margin-top:36px; text-align:center;">
         <h3 style="margin-bottom:14px;">만촌삼정에듀파크어린이집에 대해 더 궁금하다면?</h3>
-        <a class="submit-btn" style="display:inline-block; justify-self:auto;" href="https://cafe.naver.com/edupark3535" target="_blank" rel="noopener noreferrer">네이버 카페 바로가기</a>
+        <a class="cafe-link-btn" href="https://cafe.naver.com/edupark3535" target="_blank" rel="noopener noreferrer">💬 네이버 카페 바로가기</a>
       </div>
 
       <div class="video-lightbox" id="videoLightbox" aria-hidden="true">
