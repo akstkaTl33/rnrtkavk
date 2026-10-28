@@ -1105,6 +1105,8 @@ var CHAT_API = 'https://rnrtkavk-chat.vercel.app/api/chat';
 
   function fmt(t){
     var s = String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    s = s.replace(/^[ \t]*-{3,}[ \t]*$/gm,'');
+    s = s.replace(/^#{1,6}[ \t]+(.+)$/gm,'**$1**');
     s = s.replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>');
     s = s.replace(/^[ \t]*[*-][ \t]+/gm,'• ');
     return s.replace(/\n/g,'<br>');
