@@ -1031,6 +1031,153 @@
 })();
 </script>
 
+<!-- ===== Parent Q&A chat ===== -->
+<style>
+  #chatPanel{
+    position:fixed; right:16px; bottom:84px; z-index:10000;
+    width:min(380px, calc(100vw - 32px)); height:min(560px, calc(100vh - 110px)); height:min(560px, calc(100dvh - 110px));
+    display:flex; flex-direction:column; background:var(--cream); color:var(--ink);
+    border:2px solid var(--line); border-radius:22px; overflow:hidden;
+    box-shadow:0 18px 40px rgba(58,51,46,0.28);
+  }
+  #chatPanel[hidden]{ display:none; }
+  #chatPanel .chat-head{
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    background:var(--coral-deep); color:#fff; padding:12px 14px; font-family:'Jua',sans-serif; font-size:1.05rem;
+  }
+  #chatPanel .chat-x{
+    background:rgba(255,255,255,0.22); color:#fff; border:0; width:30px; height:30px; border-radius:50%;
+    font-size:0.95rem; line-height:1; cursor:pointer;
+  }
+  #chatPanel .chat-log{ flex:1; overflow-y:auto; padding:14px 12px; display:flex; flex-direction:column; gap:10px; }
+  #chatPanel .msg{
+    max-width:86%; padding:9px 13px; border-radius:16px; font-size:0.95rem; line-height:1.6; word-break:break-word;
+  }
+  #chatPanel .msg.bot{ align-self:flex-start; background:#fff; border:1px solid var(--line); border-top-left-radius:4px; }
+  #chatPanel .msg.user{ align-self:flex-end; background:var(--sky-deep); color:#fff; border-top-right-radius:4px; }
+  #chatPanel .msg.wait{ color:var(--ink-soft); }
+  #chatPanel .chat-chips{ display:flex; flex-wrap:wrap; gap:6px; padding:0 12px 10px; }
+  #chatPanel .chat-chips button{
+    background:#fff; border:1px solid var(--line); border-radius:999px; padding:6px 12px;
+    font-family:inherit; font-size:0.85rem; color:var(--ink); cursor:pointer;
+  }
+  #chatPanel .chat-form{ display:flex; gap:8px; padding:10px 12px; border-top:1px solid var(--line); background:#fff; }
+  #chatPanel .chat-form input{
+    flex:1; min-width:0; border:1px solid var(--line); border-radius:999px; padding:10px 14px;
+    font-family:inherit; font-size:16px; background:var(--cream); color:var(--ink);
+  }
+  #chatPanel .chat-form button{
+    background:var(--coral-deep); color:#fff; border:0; border-radius:999px; padding:0 16px;
+    font-family:'Jua',sans-serif; font-size:0.95rem; cursor:pointer;
+  }
+  #chatPanel .chat-form button:disabled{ opacity:.5; cursor:default; }
+  #chatPanel .chat-note{ font-size:0.72rem; color:var(--ink-soft); padding:6px 14px 10px; background:#fff; line-height:1.45; }
+  @media (max-width:560px){
+    #chatPanel{ right:12px; bottom:70px; width:calc(100vw - 24px); }
+  }
+</style>
+<div id="chatPanel" role="dialog" aria-label="궁금한 점 물어보기" hidden>
+  <div class="chat-head"><span>궁금한 점 물어보세요</span><button type="button" class="chat-x" aria-label="채팅 닫기">✕</button></div>
+  <div class="chat-log" id="chatLog" aria-live="polite"></div>
+  <div class="chat-chips" id="chatChips">
+    <button type="button">입소 절차가 궁금해요</button>
+    <button type="button">하루 일과를 알려주세요</button>
+    <button type="button">준비물이 뭔가요?</button>
+  </div>
+  <form class="chat-form" id="chatForm">
+    <input id="chatInput" type="text" maxlength="500" placeholder="궁금한 점을 입력해 주세요" autocomplete="off" aria-label="질문 입력">
+    <button type="submit" id="chatSend">보내기</button>
+  </form>
+  <p class="chat-note">어린이집 오티자료를 바탕으로 AI가 답해드려요. 참고용이니 정확한 내용은 어린이집(053-742-3535)에 확인해 주세요. 아이 이름·연락처 등 개인정보는 입력하지 마세요.</p>
+</div>
+<script>
+var CHAT_API = '';
+(function(){
+  var panel = document.getElementById('chatPanel');
+  var log = document.getElementById('chatLog');
+  var form = document.getElementById('chatForm');
+  var input = document.getElementById('chatInput');
+  var sendBtn = document.getElementById('chatSend');
+  var chips = document.getElementById('chatChips');
+  var history = [];
+  var busy = false;
+  var greeted = false;
+
+  function fmt(t){
+    var s = String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    s = s.replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>');
+    s = s.replace(/^[ \t]*[*-][ \t]+/gm,'• ');
+    return s.replace(/\n/g,'<br>');
+  }
+  function add(role, text, cls){
+    var d = document.createElement('div');
+    d.className = 'msg ' + role + (cls ? ' ' + cls : '');
+    if (role === 'bot') d.innerHTML = fmt(text); else d.textContent = text;
+    log.appendChild(d);
+    log.scrollTop = log.scrollHeight;
+    return d;
+  }
+  function open(){
+    panel.hidden = false;
+    if (!greeted){
+      greeted = true;
+      add('bot', '안녕하세요! 국공립만촌삼정에듀파크어린이집 안내 도우미예요. 입소, 하루 일과, 준비물 등 궁금한 점을 편하게 물어보세요.');
+    }
+    input.focus();
+  }
+  function close(){ panel.hidden = true; }
+  async function send(text){
+    text = (text || '').trim();
+    if (!text || busy) return;
+    busy = true; sendBtn.disabled = true;
+    chips.style.display = 'none';
+    add('user', text);
+    history.push({ role:'user', text:text });
+    var wait = add('bot', '답변을 작성하고 있어요...', 'wait');
+    var ctrl = new AbortController();
+    var timer = setTimeout(function(){ ctrl.abort(); }, 45000);
+    var reply = '';
+    try {
+      var r = await fetch(CHAT_API, {
+        method:'POST', headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify({ messages: history }), signal: ctrl.signal
+      });
+      var data = await r.json().catch(function(){ return {}; });
+      reply = data.reply || '';
+    } catch(e){ reply = ''; }
+    clearTimeout(timer);
+    wait.remove();
+    if (reply){
+      history.push({ role:'model', text:reply });
+      add('bot', reply);
+    } else {
+      history.pop();
+      add('bot', '답변을 가져오지 못했어요. 잠시 후 다시 시도해 주시거나 어린이집(053-742-3535)으로 문의해 주세요.');
+    }
+    busy = false; sendBtn.disabled = false;
+    input.focus();
+  }
+
+  form.addEventListener('submit', function(e){ e.preventDefault(); var v = input.value; input.value = ''; send(v); });
+  chips.addEventListener('click', function(e){ if (e.target.tagName === 'BUTTON') send(e.target.textContent); });
+  panel.querySelector('.chat-x').addEventListener('click', close);
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !panel.hidden) close(); });
+
+  var pop = document.getElementById('floatingPopup');
+  var link = pop && pop.querySelector('a');
+  if (link){
+    var downY = 0;
+    pop.addEventListener('pointerdown', function(e){ downY = e.clientY; });
+    link.addEventListener('click', function(e){
+      if (!CHAT_API) return;
+      e.preventDefault();
+      if (e.detail !== 0 && Math.abs(e.clientY - downY) > 4) return;
+      open();
+    });
+  }
+})();
+</script>
+
 <!-- ===== Background music toggle ===== -->
 <style>
   #bgmToggle{
